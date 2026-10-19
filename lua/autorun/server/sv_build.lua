@@ -31,8 +31,7 @@ local PvpPlayers = {}
 local AllowedUserGroups = {
     superadmin = true,
     masteradmin = true,
-    admin = true,
-    user = false
+    admin = true
 }
 
 addNetwork("BetterBuild_ChatMsg")
@@ -231,11 +230,10 @@ hook.Add("NPC_ShouldIgnore", "BetterBuild.NPCIgnoreBuild", function(npc, ent)
 end)
 
 hook.Add("PlayerNoClip", "BetterBuild.RestrictNoclip", function(ply, desiredState)
-    local userGroup = ply:GetUserGroup()
-
-    if toBool(GetConVar("betterbuild_allowNoclipOutsideBuildMode")) then return end
     if not IsValid(ply) then return false end
-    if AllowedUserGroups[userGroup] then return end
+
+    if AllowedUserGroups[ply:GetUserGroup()] then return true end
+    if toBool(GetConVar("betterbuild_allowNoclipOutsideBuildMode")) then return end
     if desiredState and not BuildingPlayers[ply:SteamID64()] then return false end
 end)
 
