@@ -30,7 +30,6 @@ local BuildingPlayers = {}
 local PvpPlayers = {}
 local AllowedUserGroups = {
     superadmin = true,
-    admin = true,
     masteradmin = true,
     admin = true,
     user = false
