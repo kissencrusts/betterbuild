@@ -28,6 +28,19 @@ local format = string.format
 
 local BuildingPlayers = {}
 local PvpPlayers = {}
+local allowedUserGropus = {
+    "superadmin",
+    "gerente",
+    "masteradmin",
+    "admin",
+    "moderador",
+    "operador",
+    "user"
+}
+local allowedUserGroupsIndexes = {}
+for k, v in pairs(allowedUserGropus) do
+    allowedUserGroupsIndexes[v] = k
+end
 
 addNetwork("BetterBuild_ChatMsg")
 addNetwork("Betterbuild_enter")
@@ -226,6 +239,7 @@ end)
 
 hook.Add("PlayerNoClip", "BetterBuild.RestrictNoclip", function(ply, desiredState)
     if toBool(GetConVar("betterbuild_allowNoclipOutsideBuildMode")) then return end
+    if allowedUserGroupsIndexes[ply:GetUserGroup()] < 7 then return end
     if desiredState and not BuildingPlayers[ply:SteamID64()] then return false end
 end)
 
