@@ -237,7 +237,7 @@ hook.Add("PlayerNoClip", "BetterBuild.RestrictNoclip", function(ply, desiredStat
     if toBool(GetConVar("betterbuild_allowNoclipOutsideBuildMode")) then return end
     if not IsValid(ply) then return false end
     if AllowedUserGroups[userGroup] then return end
-    if desiredState then return false end
+    if desiredState and not BuildingPlayers[ply:SteamID64()] then return false end
 end)
 
 hook.Add("PlayerDisconnected", "BetterBuild.Cleanup", function(ply)
