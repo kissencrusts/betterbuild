@@ -28,6 +28,11 @@ local format = string.format
 
 local BuildingPlayers = {}
 local PvpPlayers = {}
+local AllowedUserGroups = {
+    superadmin = true,
+    masteradmin = true,
+    admin = true
+}
 
 addNetwork("BetterBuild_ChatMsg")
 addNetwork("Betterbuild_enter")
@@ -225,6 +230,9 @@ hook.Add("NPC_ShouldIgnore", "BetterBuild.NPCIgnoreBuild", function(npc, ent)
 end)
 
 hook.Add("PlayerNoClip", "BetterBuild.RestrictNoclip", function(ply, desiredState)
+    if not IsValid(ply) then return false end
+
+    if AllowedUserGroups[ply:GetUserGroup()] then return true end
     if toBool(GetConVar("betterbuild_allowNoclipOutsideBuildMode")) then return end
     if desiredState and not BuildingPlayers[ply:SteamID64()] then return false end
 end)
@@ -283,4 +291,3 @@ cvars.AddChangeCallback("betterbuild_text", function() sendConfig() end, "BB_Syn
 cvars.AddChangeCallback("betterbuild_font", function() sendConfig() end, "BB_Sync_Font")
 cvars.AddChangeCallback("betterbuild_textcolor", function() sendConfig() end, "BB_Sync_Color")
 cvars.AddChangeCallback("betterbuild_pvpWarningMessage", function() sendConfig() end, "BB_Sync_Warning")
-
