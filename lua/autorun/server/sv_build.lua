@@ -108,7 +108,11 @@ local function toggleBuildMode(ply)
 
         if toBool(GetConVar("betterbuild_exitingBuildResultsinRespawn"))
         and not ply:IsFrozen() then
-            ply:Spawn()
+            local spawn = hook.Run("PlayerSelectSpawn", ply)
+            if not IsValid(spawn) then return end
+
+            ply:SetPos(spawn:GetPos())
+            ply:SetEyeAngles(Angle(0, spawn:GetAngles().y, 0))
         end
 
         if toBool(GetConVar("betterbuild_announceExitingBuildMode")) then
